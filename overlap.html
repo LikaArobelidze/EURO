@@ -1,0 +1,122 @@
+<!doctype html>
+<html lang="ka"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>EUROINS — გადაფარვის ვარიანტები</title>
+<style>
+  @font-face { font-family: FiraGo; src: url(fonts/firago-regular.woff2) format('woff2'); font-weight: 400; font-display: swap; }
+  @font-face { font-family: FiraGo; src: url(fonts/firago-medium.woff2) format('woff2'); font-weight: 500; font-display: swap; }
+  @font-face { font-family: FiraGo; src: url(fonts/firago-semibold.woff2) format('woff2'); font-weight: 600; font-display: swap; }
+  @font-face { font-family: FiraGo; src: url(fonts/firago-bold.woff2) format('woff2'); font-weight: 700; font-display: swap; }
+
+  :root { --blue: #1D3687; --navy: #162148; --yellow: #FFC500; --ink: #0A0A0A; --ease: cubic-bezier(.32,.72,.2,1); }
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: FiraGo, "Segoe UI", sans-serif; background: #fff; color: var(--navy); }
+
+  /* ---- ჰედერი: გამჭვირვალე, პირველ ბანერზე ---- */
+  .top { position: absolute; top: 0; left: 0; right: 0; height: 92px; z-index: 40; display: flex; align-items: center;
+         justify-content: space-between; gap: 30px; padding: 0 40px; color: #fff; }
+  @media (min-width: 1536px) { .top { padding: 0 80px; } }
+  .top img.logo { height: 46px; filter: brightness(0) invert(1); display: block; }
+  .top nav { display: flex; gap: 30px; font-size: 16px; }
+  .top nav span, .top .lang { display: inline-flex; align-items: center; gap: 6px; }
+  .top nav span::after, .top .lang::after { content: ""; width: 8px; height: 8px; border-right: 1.6px solid #fff; border-bottom: 1.6px solid #fff; transform: rotate(45deg) translate(-1px,-1px); }
+  .top .right { display: flex; align-items: center; gap: 22px; }
+  .top .phone { display: inline-flex; align-items: center; gap: 9px; background: var(--yellow); color: var(--ink); font-weight: 500; padding: 11px 24px; border-radius: 999px; }
+  @media (max-width: 1100px) { .top nav { display: none; } }
+
+  /* ---- ბანერი ---- */
+  .wrap + .wrap { margin-top: 140px; }
+  .wrap:last-of-type { margin-bottom: 120px; }
+  .cap { max-width: 1440px; margin: 16px auto 0; padding: 0 40px; color: #5b6a82; font-size: 15px; }
+  .cap b { color: var(--navy); font-size: 18px; }
+
+  .hero { position: relative; height: 736px; min-height: 420px; overflow: hidden; background: #06122e; }
+  .p { position: absolute; top: 0; bottom: 0; overflow: hidden; cursor: pointer;
+       transition: width .75s var(--ease), left .75s var(--ease), right .75s var(--ease), clip-path .75s var(--ease), transform .75s var(--ease), box-shadow .5s ease; }
+  .p .img { position: absolute; inset: 0; background-size: cover; transform: scale(var(--s, 1)); transition: transform .8s var(--ease); }
+  .p.l .img { background-image: url(photo1_airport.png); background-position: 56% 64%; --s: 1.16; }
+  .p.r .img { background-image: url(photo2_tbilisi.jpg); background-position: center; --s: 1.02; }
+  .p .veil { position: absolute; inset: 0; background: linear-gradient(180deg, rgba(10,18,46,.3) 0%, rgba(10,18,46,.12) 45%, rgba(10,18,46,.5) 100%); }
+  .p .body { position: absolute; left: 40px; right: 40px; bottom: 258px; color: #fff; z-index: 3; }
+  @media (min-width: 1536px) { .p .body { left: 80px; } }
+  .p h1 { font-size: clamp(28px, 3.4vw, 56px); line-height: 1.2; font-weight: 700; margin: 0 0 40px; max-width: 620px; }
+  .cta { display: inline-flex; align-items: center; gap: 8px; background: var(--yellow); color: var(--ink); font-weight: 500;
+         font-size: 16px; padding: 12px 26px; border-radius: 999px; text-decoration: none; }
+  .cta i { font-style: normal; transition: transform .35s var(--ease); }
+  .p:hover .cta i { transform: translateX(4px); }
+  .p:hover .img { transform: scale(calc(var(--s, 1) * 1.04)); }
+
+  /* ===== 1 · გადმოფარვა: მარჯვენა პანელი მარცხენას ზემოდან ადევს (58/48, ჯამი > 100%) ===== */
+  .o1 .p.l { left: 0; width: 58%; z-index: 1; }
+  .o1 .p.r { right: 0; width: 48%; z-index: 2; box-shadow: -34px 0 70px rgba(0,0,0,.55); }
+  .o1 .hero:hover .p.l:hover { width: 74%; z-index: 3; box-shadow: 34px 0 70px rgba(0,0,0,.55); }
+  .o1 .hero .p.r:hover { width: 62%; }
+
+  /* ===== 2 · დიაგონალური გადაფარვა: ზღვარი დახრილია და შუაში არ არის ===== */
+  .o2 .p { top: 0; bottom: 0; }
+  .o2 .p.l { left: 0; width: 66%; z-index: 1; clip-path: polygon(0 0, 100% 0, calc(100% - 140px) 100%, 0 100%); }
+  .o2 .p.r { right: 0; width: 46%; z-index: 2; clip-path: polygon(140px 0, 100% 0, 100% 100%, 0 100%);
+             box-shadow: -30px 0 60px rgba(0,0,0,.5); }
+  .o2 .hero .p.l:hover { width: 80%; z-index: 3; box-shadow: 30px 0 60px rgba(0,0,0,.5); }
+  .o2 .hero .p.r:hover { width: 60%; }
+  /* გადაფარვისას მარჯვენა ტექსტი მარჯვენა კიდეს ეკვრის, რომ დაფარულ ნაწილში არ მოხვდეს */
+  .o1 .p.r .body, .o2 .p.r .body, .o4 .p.r .body { left: auto; right: 40px; text-align: right; }
+  @media (min-width: 1536px) { .o1 .p.r .body, .o2 .p.r .body, .o4 .p.r .body { right: 80px; } }
+  .o1 .p.r h1, .o2 .p.r h1, .o4 .p.r h1 { margin-left: auto; }
+
+  /* ===== 3 · ბარათი: მარჯვენა ფოტო ცალკე ბარათად ადევს მარცხენას ===== */
+  .o3 .p.l { left: 0; width: 100%; z-index: 1; }
+  .o3 .p.r { right: 60px; top: 74px; bottom: 74px; width: 42%; z-index: 2; border-radius: 6px;
+             box-shadow: 0 40px 90px rgba(0,0,0,.6); }
+  .o3 .p.r .body { bottom: 120px; left: 44px; right: 44px; }
+  .o3 .p.r h1 { font-size: clamp(24px, 2.4vw, 40px); }
+  .o3 .hero .p.r:hover { transform: translateY(-14px); box-shadow: 0 54px 110px rgba(0,0,0,.66); }
+  .o3 .p.l .body { left: 40px; }
+
+  /* ===== 4 · ასიმეტრიული 64/36, მიტანაზე ადგილებს იცვლიან ===== */
+  .o4 .p.l { left: 0; width: 64%; z-index: 2; box-shadow: 30px 0 70px rgba(0,0,0,.5); }
+  .o4 .p.r { right: 0; width: 42%; z-index: 1; }
+  .o4 .hero .p.r:hover { width: 64%; z-index: 3; box-shadow: -30px 0 70px rgba(0,0,0,.5); }
+  .o4 .hero .p.l:hover { width: 72%; }
+  .o4 .hero::after { content: ""; position: absolute; top: 0; bottom: 0; left: 64%; width: 4px; background: var(--yellow); z-index: 4;
+                     transition: left .75s var(--ease); pointer-events: none; }
+  .o4 .hero:has(.p.r:hover)::after { left: 36%; }
+  .o4 .hero:has(.p.l:hover)::after { left: 72%; }
+
+  @media (max-width: 900px) {
+    .hero { height: auto; }
+    .p { position: relative; width: 100% !important; left: auto !important; right: auto !important; top: auto; bottom: auto;
+         height: 58vh; clip-path: none !important; transform: none !important; box-shadow: none !important; border-radius: 0 !important; }
+    .p .body { bottom: 56px; left: 24px; right: 24px; }
+    .o4 .hero::after { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<div class="top">
+  <img class="logo" src="euroins-logo.png" alt="EUROINS">
+  <nav><span>ჩემთვის</span><span>ბიზნესისთვის</span><span>ევროინსი</span><span>მომსახურება</span></nav>
+  <div class="right"><span class="phone">📞 220 30 30</span><span class="lang">ქარ</span></div>
+</div>
+
+<div id="app"></div>
+
+<script>
+  const V = [
+    ['o1', '1 · გადმოფარვა', 'მარჯვენა ფოტო მარცხენას ზემოდან ადევს (58% + 48%). მაუსის მიტანაზე არჩეული მხარე მეორეს გადაეფარება.'],
+    ['o2', '2 · დიაგონალური გადაფარვა', 'ზღვარი დახრილია და შუაში არ არის; პანელები ერთმანეთს ჩრდილით ედება.'],
+    ['o3', '3 · ბარათი', 'მარჯვენა ფოტო ცალკე ბარათად ადევს დიდ ფოტოს; მიტანაზე ოდნავ იწევა ზემოთ.'],
+    ['o4', '4 · ასიმეტრიული 64/36', 'გამყოფი ყვითელი ხაზი შუაში არ დგას; მიტანაზე მხარეები ადგილებს იცვლიან.'],
+  ];
+  document.getElementById('app').innerHTML = V.map(v => `
+    <div class="wrap ${v[0]}">
+      <div class="hero">
+        <div class="p l"><div class="img"></div><div class="veil"></div>
+          <div class="body"><h1>სამოგზაურო დაზღვევა</h1><a class="cta" href="#">შეიძინე ონლაინ <i>→</i></a></div></div>
+        <div class="p r"><div class="img"></div><div class="veil"></div>
+          <div class="body"><h1>ვიზიტორთა სავალდებულო დაზღვევა</h1><a class="cta" href="#">შეიძინე ონლაინ <i>→</i></a></div></div>
+      </div>
+      <div class="cap"><b>${v[1]}</b><br>${v[2]}</div>
+    </div>`).join('');
+</script>
+</body></html>

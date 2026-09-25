@@ -33,10 +33,15 @@
   @media (max-width: 860px) { #app > div + div { margin-top: 70px; } }
   .label { max-width: 1440px; margin: 18px auto 46px; padding: 0 40px; }
   .label b { font-size: 20px; } .label span { color: #5b6a82; font-size: 15px; }
-  /* საიტის ზუსტი გეომეტრია: სიმაღლე 736px, გაყოფა 60/40 */
-  .hero { display: flex; height: 736px; min-height: 420px; overflow: hidden; background: #06122e; }
-  .p { position: relative; overflow: hidden; cursor: pointer; transition: flex-basis .7s var(--ease); }
-  .p.l, .p.r { flex: 0 0 50%; }
+  /* გადაფარვის ლოგიკა ყველა ვარიანტისთვის: ასიმეტრიული 64/42 (ჯამი 106%),
+     პანელები ერთმანეთს ფარავენ და მაუსზე არჩეული მეორეს გადაეფარება */
+  .hero { position: relative; display: block; height: 736px; min-height: 420px; overflow: hidden; background: #06122e; }
+  .p { position: absolute; top: 0; bottom: 0; overflow: hidden; cursor: pointer;
+       transition: width .7s var(--ease), box-shadow .5s ease; }
+  .p.l { left: 0; width: 60%; z-index: 2; box-shadow: 30px 0 70px rgba(0,0,0,.5); }
+  .p.r { right: 0; width: 44%; z-index: 1; }   /* 60 + 44 = 104% → 4% გადაფარვა */
+  .hero .p.l:hover { width: 66%; }
+  .hero .p.r:hover { width: 56%; z-index: 3; box-shadow: -30px 0 70px rgba(0,0,0,.5); }
   .p .img { position: absolute; inset: 0; background-size: cover; transition: transform .8s var(--ease), filter .6s ease, opacity .6s ease; }
   .p.l .img { background-image: url(photo1_airport.png); background-position: 56% 64%; transform: scale(1.16); }
   .p.r .img { background-image: url(photo2_tbilisi.jpg); background-position: center; transform: scale(1.02); }
@@ -47,9 +52,14 @@
   .p .body { position: absolute; left: 24px; bottom: 258px; color: #fff; z-index: 3; transition: transform .6s var(--ease), opacity .5s ease; }
   @media (min-width: 1280px) { .p .body { left: 40px; } }
   @media (min-width: 1536px) { .p .body { left: 80px; } }
-  .p h1 { font-size: clamp(30px, 3.6vw, 60px); line-height: 1.2; font-weight: 700; margin: 0 0 40px; display: block; }
-  /* ორივე სათაური ორ ხაზად იშლება, რომ სიმეტრიული იყოს */
-  .p.l h1 { max-width: 672px; } .p.r h1 { max-width: 560px; }
+  .p h1 { font-size: clamp(26px, 2.9vw, 48px); line-height: 1.22; font-weight: 700; margin: 0 0 36px; display: block; max-width: 520px; }
+  /* ორივე ტექსტი თავისი ფოტოს მარცხენა კიდიდან ერთნაირად არის დაშორებული.
+     მარჯვენას ემატება 4vw — ზუსტად იმდენი, რამდენითაც მარცხენა ფოტო მას ფარავს */
+  .p.r .body { left: calc(4vw + 24px); right: 24px; text-align: left; }
+  @media (min-width: 1280px) { .p.r .body { left: calc(4vw + 40px); right: 40px; } }
+  @media (min-width: 1536px) { .p.r .body { left: calc(4vw + 80px); right: 80px; } }
+  /* მარცხენა ფოტოს გაფართოებისას (60% → 66%) მარჯვენა ტექსტი იმავე 6vw-ით გადაიწევს, რომ არ დაიფაროს */
+  .hero .p.l:hover ~ .p.r .body { transform: translateX(6vw); }
   .cta { display: inline-flex; align-items: center; gap: 8px; background: var(--yellow); color: var(--ink); font-weight: 500; font-size: 16px; padding: 12px 26px; border-radius: 999px; text-decoration: none; transition: gap .35s ease, background .3s ease; }
   .cta:hover { background: #ffd23d; }
   .cta i { font-style: normal; transition: transform .35s var(--ease); }
@@ -114,13 +124,35 @@
   .v10 .p:hover .body { transform: translateX(14px); }
   .v10 .p:hover .img { transform: scale(calc(var(--s, 1) * 1.03)); }
 
+  /* D · ასიმეტრიული გადაფარვა 64/36.
+     ყვითელი ხაზი პანელის საკუთარი კიდეა (border), ამიტომ ხაზი პანელს ზუსტად მიჰყვება და არ აგვიანებს */
+  /* D · ყვითელი ზოლი კიდეზე: გადაფარვის ადგილას ზოლია, მიტანაზე სამჯერ განიერდება */
+  .v11 .p.l::after, .v11 .p.r::before { content: ""; position: absolute; top: 0; bottom: 0; width: 6px;
+                                        background: var(--yellow); z-index: 4; transition: width .5s var(--ease); }
+  .v11 .p.l::after { right: 0; } .v11 .p.r::before { left: 0; }
+  .v11 .hero .p.l:hover::after { width: 18px; }
+  .v11 .hero .p.r:hover::before { width: 18px; }
+  .v11 .p:hover .img { transform: scale(calc(var(--s, 1) * 1.04)); }
+
+  /* E · ლურჯი ფარდა: მეორე მხარეს შავის ნაცვლად ბრენდის ლურჯი ედება */
+  .v12 .hero:hover .p:not(:hover) .veil { background: linear-gradient(180deg, rgba(29,54,135,.72), rgba(22,33,72,.84)); }
+  .v12 .hero:hover .p:not(:hover) .img { filter: saturate(.7); }
+  .v12 .p:hover .img { transform: scale(calc(var(--s, 1) * 1.04)); }
+
   /* 8 · მინის ეფექტი (გამორთული მხარე ბუნდოვანდება) */
   .v8 .p .veil { backdrop-filter: blur(0px); }
   .v8 .hero:hover .p:not(:hover) .veil { backdrop-filter: blur(6px); background: linear-gradient(180deg, rgba(10,18,46,.55), rgba(10,18,46,.65)); }
   .v8 .p:hover .img { transform: scale(calc(var(--s, 1) * 1.05)); }
 
   footer { padding: 50px 40px 80px; background: var(--blue); color: #fff; margin-top: 50px; font-size: 15px; }
-  @media (max-width: 860px) { .hero { display: block; height: auto; } .p { height: 46vh; } .v5 .p { position: relative; clip-path: none !important; } .top nav { display: none; } }
+  /* ტელეფონზე გადაფარვა აზრს კარგავს — ფოტოები ერთმანეთის ქვემოთ, სრული სიგანით */
+  @media (max-width: 860px) {
+    .hero { height: auto; }
+    .p { position: relative; width: 100% !important; height: 52vh; box-shadow: none !important; border: 0 !important; }
+    .p .body { bottom: 56px; left: 24px; right: 24px; text-align: left; }
+    .p h1 { max-width: none; margin-left: 0; }
+    .top nav { display: none; }
+  }
 </style>
 </head>
 <body>
@@ -143,6 +175,8 @@
     ['v3', 'ვარიანტი A · ყვითელი ხაზი', 'სათაურის ქვეშ ყვითელი ხაზი იზრდება, ტექსტი ოდნავ იწევა ზემოთ, მეორე მხარეს კი მსუბუქი ფარდა ეფარება.'],
     ['v8', 'ვარიანტი B · მინის ეფექტი', 'მეორე მხარე ბუნდოვანდება და მუქდება, როგორც მინის მიღმა; მიტანილი ფოტო ოდნავ მიუახლოვდება.'],
     ['v10', 'ვარიანტი C · ყვითელი ჩარჩო', 'არჩეულ მხარეს ყვითელი ჩარჩო ეხატება და ტექსტი ოდნავ გადაიწევს; მეორე მხარე უცვლელი რჩება.'],
+    ['v11', 'ვარიანტი D · ყვითელი ზოლი კიდეზე', 'გადაფარვის ადგილას ყვითელი ზოლია; მიტანაზე სამჯერ განიერდება.'],
+    ['v12', 'ვარიანტი E · ლურჯი ფარდა', 'მეორე მხარეს შავის ნაცვლად ბრენდის ლურჯი ფარდა ედება.'],
   ];
   // ბანერი ზემოთ, აღწერა ქვემოთ — რომ პირველ ბანერს ჰედერი ზუსტად ისე დაედოს, როგორც საიტზე
   const tpl = (cls) => `
