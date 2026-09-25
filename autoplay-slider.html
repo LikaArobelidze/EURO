@@ -1,0 +1,135 @@
+<!doctype html>
+<html lang="ka"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>EUROINS — ბანერის გადასვლები</title>
+<style>
+  :root { --blue: #1D3687; --navy: #162148; --yellow: #FFF100; }
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: Sylfaen, "Segoe UI", Arial, sans-serif; background: #f4f6fa; color: var(--navy); }
+
+  /* ---------- ბანერი ---------- */
+  .hero { position: relative; width: 100%; height: 72vh; min-height: 420px; overflow: hidden; background: #06122e; }
+  .slide { position: absolute; inset: 0; opacity: 0; will-change: opacity, clip-path, filter, transform; }
+  .slide.on { opacity: 1; }
+  .slide .img { position: absolute; inset: 0; background-size: cover; background-position: center; }
+  /* ნელი ზუმი (Ken Burns) — ყოველთვის მუშაობს, გადასვლის ტიპისგან დამოუკიდებლად */
+  .slide.on .img { animation: kb 9s ease-out forwards; }
+  @keyframes kb { from { transform: scale(1.0); } to { transform: scale(1.08); } }
+  .scrim { position: absolute; inset: 0; background: linear-gradient(90deg, rgba(10,18,46,.75) 0%, rgba(10,18,46,.35) 45%, rgba(10,18,46,0) 75%); }
+
+  .hero__body { position: absolute; left: 6%; top: 50%; transform: translateY(-50%); z-index: 3; color: #fff; max-width: 620px; }
+  .hero__body h1 { font-size: clamp(30px, 4.6vw, 62px); line-height: 1.12; margin: 0 0 26px; font-weight: 700; text-shadow: 0 2px 24px rgba(0,0,0,.35); }
+  .cta { display: inline-block; background: var(--yellow); color: var(--navy); font-weight: 700; font-size: 18px; padding: 14px 30px; border-radius: 30px; text-decoration: none; }
+  .dots { position: absolute; left: 6%; bottom: 28px; z-index: 3; display: flex; gap: 10px; }
+  .dots i { width: 34px; height: 4px; border-radius: 2px; background: rgba(255,255,255,.45); cursor: pointer; }
+  .dots i.on { background: var(--yellow); }
+
+  /* ---------- 1. გადაფარვა (fade) ---------- */
+  .m-fade .slide { transition: opacity 1.6s ease; }
+
+  /* ---------- 2. რბილი დიაგონალური ფარდა (wipe) ---------- */
+  .m-wipe .slide { transition: clip-path 1.5s cubic-bezier(.65,.02,.25,1), opacity .1s; }
+  .m-wipe .slide.on { opacity: 1; clip-path: polygon(-30% 0, 130% 0, 130% 100%, -30% 100%); }
+  .m-wipe .slide.off { opacity: 1; clip-path: polygon(-30% 0, -30% 0, -20% 100%, -30% 100%); }
+  .m-wipe .slide.idle { opacity: 0; clip-path: polygon(130% 0, 130% 0, 130% 100%, 130% 100%); }
+
+  /* ---------- 3. ბუნდოვანება + ზუმი (blur) ---------- */
+  .m-blur .slide { transition: opacity 1.4s ease, filter 1.4s ease, transform 1.4s ease; }
+  .m-blur .slide:not(.on) { filter: blur(22px); transform: scale(1.06); }
+  .m-blur .slide.on { filter: blur(0); transform: scale(1); }
+
+  /* ---------- 4. ვერტიკალური ზოლები (bands) ---------- */
+  .slide .band { position: absolute; top: 0; bottom: 0; transform: translateY(101%); }
+  .m-bands .slide { transition: none; }
+  .m-bands .slide .band { transition: transform 1.1s cubic-bezier(.62,.03,.2,1); }
+  .m-bands .slide.on .band { transform: translateY(0); }
+
+  /* ---------- მართვის პანელი ---------- */
+  .panel { max-width: 1100px; margin: 26px auto 60px; padding: 0 20px; }
+  .panel h2 { font-size: 20px; margin: 0 0 14px; }
+  .modes { display: flex; flex-wrap: wrap; gap: 12px; }
+  .modes button { border: 1px solid #d5dced; background: #fff; color: var(--navy); font: inherit; font-size: 16px;
+                  padding: 12px 22px; border-radius: 26px; cursor: pointer; }
+  .modes button.on { background: var(--blue); color: #fff; border-color: var(--blue); }
+  .hint { margin-top: 16px; color: #5b6a82; font-size: 15px; line-height: 1.6; }
+  .hint b { color: var(--navy); }
+</style>
+</head>
+<body>
+
+<div class="hero m-fade" id="hero">
+  <div class="slide" id="s0"><div class="img" style="background-image:url(photo1_airport.png)"></div></div>
+  <div class="slide" id="s1"><div class="img" style="background-image:url(photo2_tbilisi.jpg)"></div></div>
+  <div class="scrim"></div>
+  <div class="hero__body">
+    <h1>სამოგზაურო დაზღვევა</h1>
+    <a class="cta" href="#">შეიძინე ონლაინ</a>
+  </div>
+  <div class="dots"><i class="on" data-i="0"></i><i data-i="1"></i></div>
+</div>
+
+<div class="panel">
+  <h2>აირჩიეთ გადასვლის ტიპი</h2>
+  <div class="modes">
+    <button class="on" data-m="fade">1 · გადაფარვა</button>
+    <button data-m="wipe">2 · დიაგონალური ფარდა</button>
+    <button data-m="blur">3 · ბუნდოვანება</button>
+    <button data-m="bands">4 · ვერტიკალური ზოლები</button>
+  </div>
+  <p class="hint">
+    ყველა ვარიანტში ფოტო ნელა უახლოვდება (<b>Ken Burns</b>) და ერთმანეთს <b>6 წამში</b> ენაცვლება.<br>
+    ქვემოთ, ბანერზე მარცხნივ, წერტილებზე დაჭერით ხელით გადართავთ.
+  </p>
+</div>
+
+<script>
+  const hero = document.getElementById('hero');
+  const slides = [document.getElementById('s0'), document.getElementById('s1')];
+  const dots = [...document.querySelectorAll('.dots i')];
+  const BANDS = 6;
+  let cur = 0, mode = 'fade', timer;
+
+  // ზოლების ვარიანტისთვის თითოეული სლაიდი იყოფა ვერტიკალურ ნაწილებად
+  slides.forEach(s => {
+    const url = s.querySelector('.img').style.backgroundImage;
+    for (let i = 0; i < BANDS; i++) {
+      const b = document.createElement('div');
+      b.className = 'band';
+      b.style.cssText = `left:${(100 / BANDS) * i}%;width:${100 / BANDS + .2}%;background-image:${url};background-size:${BANDS * 100}% 100%;background-position:${(100 / (BANDS - 1)) * i}% center;background-repeat:no-repeat;transition-delay:${i * 90}ms`;
+      s.appendChild(b);
+    }
+  });
+
+  function show(next) {
+    cur = next;
+    slides.forEach((s, i) => {
+      s.classList.remove('on', 'off', 'idle');
+      s.classList.add(i === cur ? 'on' : (mode === 'wipe' ? 'off' : 'idle'));
+      const img = s.querySelector('.img');
+      if (mode === 'bands') {
+        // the new photo arrives as bands over the old one, which stays fully visible underneath
+        s.style.opacity = 1; s.style.zIndex = i === cur ? 2 : 1;
+        img.style.opacity = i === cur ? 0 : 1;
+        if (i !== cur) s.querySelectorAll('.band').forEach(b => { b.style.transition = 'none'; b.style.transform = 'translateY(101%)'; void b.offsetWidth; b.style.transition = ''; b.style.transform = ''; });
+      } else {
+        s.style.opacity = ''; s.style.zIndex = ''; img.style.opacity = '';
+      }
+      if (i === cur) { img.style.animation = 'none'; void img.offsetWidth; img.style.animation = ''; }
+    });
+    // once the bands have landed, hand the photo back to the base layer so the slow zoom continues
+    if (mode === 'bands') setTimeout(() => { if (mode === 'bands') slides[cur].querySelector('.img').style.opacity = 1; }, 1700);
+    dots.forEach((d, i) => d.classList.toggle('on', i === cur));
+  }
+  function play() { clearInterval(timer); timer = setInterval(() => show(1 - cur), 6000); }
+
+  document.querySelectorAll('.modes button').forEach(b => b.addEventListener('click', () => {
+    document.querySelectorAll('.modes button').forEach(x => x.classList.remove('on'));
+    b.classList.add('on');
+    mode = b.dataset.m;
+    hero.className = 'hero m-' + mode;
+    show(cur); play();
+  }));
+  dots.forEach(d => d.addEventListener('click', () => { show(+d.dataset.i); play(); }));
+
+  show(0); play();
+</script>
+</body></html>

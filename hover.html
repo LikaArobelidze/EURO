@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="ka"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>EUROINS — გაყოფილი ბანერი</title>
+<style>
+  :root { --blue: #1D3687; --navy: #162148; --yellow: #FFF100; --ease: cubic-bezier(.32,.72,.2,1); }
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: Sylfaen, "Segoe UI", Arial, sans-serif; background: #f4f6fa; color: var(--navy); }
+
+  .hero { position: relative; width: 100%; height: 72vh; min-height: 420px; overflow: hidden; background: #06122e; display: flex; }
+  .panel { position: relative; overflow: hidden; flex: 0 0 50%; cursor: pointer; }
+  /* --base: თითოეული ფოტოს საწყისი ზუმი (აეროპორტის კადრი მოახლოებულია, რომ ფანჯრის ჩარჩო არ ერეოდეს) */
+  .panel .img { position: absolute; inset: -2%; background-size: cover;
+                transform: scale(var(--base, 1));
+                transition: transform .9s var(--ease), filter .7s ease; }
+  .panel.left .img { --base: 1.16; background-position: 56% 64%; }
+  .panel.right .img { --base: 1.02; background-position: center; }
+  .panel .scrim { position: absolute; inset: 0; background: linear-gradient(180deg, rgba(10,18,46,.25) 0%, rgba(10,18,46,.15) 40%, rgba(10,18,46,.55) 100%); }
+  .panel .body { position: absolute; left: 8%; right: 8%; top: 50%; transform: translateY(-50%); color: #fff; z-index: 2; transition: opacity .5s ease; }
+  .panel h2 { font-size: clamp(24px, 2.7vw, 46px); line-height: 1.15; margin: 0 0 22px; font-weight: 700; text-shadow: 0 2px 20px rgba(0,0,0,.4); }
+  .cta { display: inline-block; background: var(--yellow); color: var(--navy); font-weight: 700; font-size: 17px;
+         padding: 13px 28px; border-radius: 30px; text-decoration: none; }
+
+  /* ეფექტი: ზომა არ იცვლება — მეორე მხარე მუქდება, მიტანილი ინათებს და ოდნავ იზუმება */
+  .hero:hover .panel .img { filter: brightness(.45) saturate(.8); transform: scale(calc(var(--base, 1) * 1.01)); }
+  .hero .panel:hover .img { filter: none; transform: scale(calc(var(--base, 1) * 1.07)); }
+  .hero:hover .panel:not(:hover) .body { opacity: .75; }
+
+  @media (max-width: 760px) {
+    .hero { display: block; height: auto; }
+    .panel { flex: none; height: 46vh; }
+    .hero:hover .panel .img { filter: none; transform: scale(var(--base, 1)); }
+  }
+</style>
+</head>
+<body>
+
+<div class="hero" id="hero">
+  <div class="panel left">
+    <div class="img" style="background-image:url(photo1_airport.png)"></div>
+    <div class="scrim"></div>
+    <div class="body"><h2>სამოგზაურო დაზღვევა</h2><a class="cta" href="#">შეიძინე ონლაინ</a></div>
+  </div>
+  <div class="panel right">
+    <div class="img" style="background-image:url(photo2_tbilisi.jpg)"></div>
+    <div class="scrim"></div>
+    <div class="body"><h2>ვიზიტორთა სავალდებულო დაზღვევა</h2><a class="cta" href="#">შეიძინე ონლაინ</a></div>
+  </div>
+</div>
+
+</body></html>

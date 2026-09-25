@@ -1,0 +1,169 @@
+<!doctype html>
+<html lang="ka"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>EUROINS — ბანერის 8 ვარიანტი</title>
+<style>
+  /* საიტის ნამდვილი შრიფტი */
+  @font-face { font-family: FiraGo; src: url(fonts/firago-regular.woff2) format('woff2'); font-weight: 400; font-display: swap; }
+  @font-face { font-family: FiraGo; src: url(fonts/firago-medium.woff2) format('woff2'); font-weight: 500; font-display: swap; }
+  @font-face { font-family: FiraGo; src: url(fonts/firago-semibold.woff2) format('woff2'); font-weight: 600; font-display: swap; }
+  @font-face { font-family: FiraGo; src: url(fonts/firago-bold.woff2) format('woff2'); font-weight: 700; font-display: swap; }
+
+  :root { --blue: #1D3687; --navy: #162148; --yellow: #FFC500; --ink: #0A0A0A; --ease: cubic-bezier(.32,.72,.2,1); }
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: FiraGo, "Segoe UI", sans-serif; background: #fff; color: var(--navy); }
+
+  /* ---- საიტის ჰედერის მაკეტი, რომ კონტექსტი ჩანდეს ---- */
+  /* ჰედერი გამჭვირვალეა და ბანერზე ზემოდან ადევს, როგორც ნამდვილ საიტზე */
+  .top { height: 92px; display: flex; align-items: center; justify-content: space-between; gap: 30px; padding: 0 40px;
+         position: absolute; top: 0; left: 0; right: 0; background: transparent; z-index: 30; color: #fff; }
+  @media (min-width: 1536px) { .top { padding: 0 80px; } }
+  .top img.logo { height: 46px; width: auto; display: block; filter: brightness(0) invert(1); }  /* თეთრი ლოგო */
+  .top nav { display: flex; gap: 30px; font-size: 16px; color: #fff; font-weight: 400; }
+  .top nav span { display: inline-flex; align-items: center; gap: 6px; cursor: pointer; }
+  .top nav span::after { content: ""; width: 8px; height: 8px; border-right: 1.6px solid #fff; border-bottom: 1.6px solid #fff; transform: rotate(45deg) translate(-1px, -1px); }
+  .top .right { display: flex; align-items: center; gap: 22px; }
+  .top .phone { display: inline-flex; align-items: center; gap: 9px; background: var(--yellow); color: var(--ink); font-weight: 500; font-size: 16px; padding: 11px 24px; border-radius: 999px; }
+  .top .lang { display: inline-flex; align-items: center; gap: 6px; font-size: 16px; cursor: pointer; color: #fff; }
+  .top .lang::after { content: ""; width: 8px; height: 8px; border-right: 1.6px solid #fff; border-bottom: 1.6px solid #fff; transform: rotate(45deg) translate(-1px, -1px); }
+
+  /* ---- ბანერის საერთო სტილი (საიტის ზუსტი პარამეტრებით) ---- */
+  /* ბანერებს შორის თეთრი სივრცე, რომ ერთმანეთს არ ეკროს */
+  #app > div + div { margin-top: 140px; }
+  #app > div:last-child { margin-bottom: 120px; }
+  @media (max-width: 860px) { #app > div + div { margin-top: 70px; } }
+  .label { max-width: 1440px; margin: 18px auto 46px; padding: 0 40px; }
+  .label b { font-size: 20px; } .label span { color: #5b6a82; font-size: 15px; }
+  /* საიტის ზუსტი გეომეტრია: სიმაღლე 736px, გაყოფა 60/40 */
+  .hero { display: flex; height: 736px; min-height: 420px; overflow: hidden; background: #06122e; }
+  .p { position: relative; overflow: hidden; cursor: pointer; transition: flex-basis .7s var(--ease); }
+  .p.l, .p.r { flex: 0 0 50%; }
+  .p .img { position: absolute; inset: 0; background-size: cover; transition: transform .8s var(--ease), filter .6s ease, opacity .6s ease; }
+  .p.l .img { background-image: url(photo1_airport.png); background-position: 56% 64%; transform: scale(1.16); }
+  .p.r .img { background-image: url(photo2_tbilisi.jpg); background-position: center; transform: scale(1.02); }
+  .p .veil { position: absolute; inset: 0; background: linear-gradient(180deg, rgba(10,18,46,.3) 0%, rgba(10,18,46,.12) 45%, rgba(10,18,46,.5) 100%); transition: opacity .6s ease, backdrop-filter .6s ease; }
+  /* ტექსტი: მარცხნიდან 40px (≥1280) და 80px (≥1536).
+     ბლოკი ქვემოდან ითვლება, ამიტომ ყვითელი ხაზი და ღილაკი ორივე მხარეს ერთ სიმაღლეზე დგას,
+     სათაური კი მაღლა იზრდება — სამხაზიანიც რომ იყოს, ხაზი მაინც არ იძვრება */
+  .p .body { position: absolute; left: 24px; bottom: 258px; color: #fff; z-index: 3; transition: transform .6s var(--ease), opacity .5s ease; }
+  @media (min-width: 1280px) { .p .body { left: 40px; } }
+  @media (min-width: 1536px) { .p .body { left: 80px; } }
+  .p h1 { font-size: clamp(30px, 3.6vw, 60px); line-height: 1.2; font-weight: 700; margin: 0 0 40px; display: block; }
+  /* ორივე სათაური ორ ხაზად იშლება, რომ სიმეტრიული იყოს */
+  .p.l h1 { max-width: 672px; } .p.r h1 { max-width: 560px; }
+  .cta { display: inline-flex; align-items: center; gap: 8px; background: var(--yellow); color: var(--ink); font-weight: 500; font-size: 16px; padding: 12px 26px; border-radius: 999px; text-decoration: none; transition: gap .35s ease, background .3s ease; }
+  .cta:hover { background: #ffd23d; }
+  .cta i { font-style: normal; transition: transform .35s var(--ease); }
+
+  /* 1 · გაფართოება (როგორც საიტს უკვე აქვს ჩადებული) */
+  .v1 .hero:hover .p { flex-basis: 25%; } .v1 .hero .p:hover { flex-basis: 75%; }
+  /* გაფართოებისას კადრი უფრო ღრმად უნდა მოიჭრას, თორემ ფანჯრის ჩარჩო შემოდის */
+  .v1 .p.l:hover .img { transform: scale(1.34); } .v1 .p.r:hover .img { transform: scale(1.12); }
+  .v1 .p.l:not(:hover) .img { transform: scale(1.1); }
+
+  /* 2 · ზუმი და დაბნელება */
+  .v2 .hero:hover .p .img { filter: brightness(.45) saturate(.8); }
+  .v2 .hero .p:hover .img { filter: none; }
+  .v2 .p.l:hover .img { transform: scale(1.24); } .v2 .p.r:hover .img { transform: scale(1.09); }
+
+  /* 3 · ყვითელი ხაზი და ტექსტის აწევა */
+  /* width: fit-content — რომ ყვითელი ხაზი ტექსტის სიგრძეს მიჰყვეს, ღილაკი კი ქვემოთ დარჩეს */
+  .v3 .p h1 { width: fit-content; padding-bottom: 10px; background-image: linear-gradient(var(--yellow), var(--yellow)); background-repeat: no-repeat; background-position: 0 100%; background-size: 0% 4px; transition: background-size .6s var(--ease); }
+  .v3 .p:hover h1 { background-size: 100% 4px; }
+  .v3 .p:hover .body { transform: translateY(-10px); }
+  .v3 .p:hover .img { filter: brightness(1.08); }
+  /* მეორე მხარეს ოდნავ ფარდა ეფარება (მე-8-ის მსგავსად, ოღონდ უფრო სუსტად) */
+  .v3 .hero:hover .p:not(:hover) .veil { backdrop-filter: blur(2.5px); background: linear-gradient(180deg, rgba(10,18,46,.45), rgba(10,18,46,.55)); }
+  .v3 .hero:hover .p:not(:hover) .body { opacity: .85; }
+
+  /* 4 · მაუსის პარალაქსი (ფოტო მაუსს მიჰყვება) */
+  .v4 .p .img { transition: transform .35s ease-out, filter .6s ease; }
+  .v4 .hero:hover .p:not(:hover) .veil { opacity: 1; }
+
+  /* 5 · დიაგონალური ზღვარი */
+  .v5 .hero { position: relative; display: block; }
+  .v5 .p { position: absolute; inset: 0; flex: none; transition: clip-path .75s var(--ease); }
+  .v5 .p.l { clip-path: polygon(0 0, 62% 0, 54% 100%, 0 100%); }
+  .v5 .p.r { clip-path: polygon(62% 0, 100% 0, 100% 100%, 54% 100%); }
+  .v5 .hero:hover .p.l { clip-path: polygon(0 0, 78% 0, 70% 100%, 0 100%); }
+  .v5 .hero:hover .p.l ~ .p.r { clip-path: polygon(78% 0, 100% 0, 100% 100%, 70% 100%); }
+  .v5 .hero .p.r:hover { clip-path: polygon(38% 0, 100% 0, 100% 100%, 30% 100%); }
+  .v5 .hero .p.r:hover ~ .p.l, .v5 .hero:has(.p.r:hover) .p.l { clip-path: polygon(0 0, 38% 0, 30% 100%, 0 100%); }
+  .v5 .p.l .body { right: 30%; } .v5 .p.r .body { left: 45%; }
+  /* დიაგონალურში პანელი მთელ სიგანეზეა, ამიტომ კადრი უფრო ღრმად იჭრება */
+  .v5 .p.l .img { transform: scale(1.5); background-position: 52% 66%; }
+  .v5 .p.r .img { transform: scale(1.18); }
+
+  /* 6 · ფერის გაცოცხლება (გამორთული მხარე უფერულია) */
+  .v6 .p .img { filter: saturate(.25) brightness(.7); }
+  .v6 .p:hover .img { filter: saturate(1.05) brightness(1); transform: scale(calc(var(--s, 1) * 1.05)); }
+
+  /* 7 · ისრიანი ღილაკი და ლურჯი ფარდა */
+  .v7 .p .cta { opacity: 0; transform: translateY(14px); transition: opacity .45s ease, transform .45s var(--ease); }
+  .v7 .p:hover .cta { opacity: 1; transform: none; }
+  .v7 .p:hover .cta i { transform: translateX(4px); }
+  .v7 .hero:hover .p:not(:hover) .veil { background: linear-gradient(180deg, rgba(29,54,135,.72), rgba(22,33,72,.82)); }
+
+  /* C · ყვითელი ჩარჩო: მეორე მხარეს არაფერი ემართება, არჩეულს ჩარჩო ეხატება */
+  /* მხოლოდ ორი გვერდი: ზედა ხაზი მარცხნიდან, შემდეგ მარცხენა ხაზი ქვემოთ */
+  .frame { position: absolute; inset: 22px; z-index: 2; pointer-events: none; }
+  .frame::before, .frame::after { content: ""; position: absolute; left: 0; top: 0; background: var(--yellow); }
+  .frame::before { height: 3px; width: 0; transition: width .5s var(--ease); }
+  .frame::after { width: 3px; height: 0; transition: height .5s var(--ease) .12s; }
+  .v10 .p:hover .frame::before { width: 100%; }
+  .v10 .p:hover .frame::after { height: 100%; }
+  .v10 .p:hover .body { transform: translateX(14px); }
+  .v10 .p:hover .img { transform: scale(calc(var(--s, 1) * 1.03)); }
+
+  /* 8 · მინის ეფექტი (გამორთული მხარე ბუნდოვანდება) */
+  .v8 .p .veil { backdrop-filter: blur(0px); }
+  .v8 .hero:hover .p:not(:hover) .veil { backdrop-filter: blur(6px); background: linear-gradient(180deg, rgba(10,18,46,.55), rgba(10,18,46,.65)); }
+  .v8 .p:hover .img { transform: scale(calc(var(--s, 1) * 1.05)); }
+
+  footer { padding: 50px 40px 80px; background: var(--blue); color: #fff; margin-top: 50px; font-size: 15px; }
+  @media (max-width: 860px) { .hero { display: block; height: auto; } .p { height: 46vh; } .v5 .p { position: relative; clip-path: none !important; } .top nav { display: none; } }
+</style>
+</head>
+<body>
+
+<div class="top">
+  <img class="logo" src="euroins-logo.png" alt="EUROINS">
+  <nav><span>ჩემთვის</span><span>ბიზნესისთვის</span><span>ევროინსი</span><span>მომსახურება</span></nav>
+  <div class="right">
+    <span class="phone">📞 220 30 30</span>
+    <span class="lang">ქარ</span>
+  </div>
+</div>
+
+<div id="app"></div>
+
+<footer>ვარიანტები ერთ გვერდზეა — მაუსი მიიტანეთ თითოეულ ბანერზე და შეადარეთ.</footer>
+
+<script>
+  const VARIANTS = [
+    ['v3', 'ვარიანტი A · ყვითელი ხაზი', 'სათაურის ქვეშ ყვითელი ხაზი იზრდება, ტექსტი ოდნავ იწევა ზემოთ, მეორე მხარეს კი მსუბუქი ფარდა ეფარება.'],
+    ['v8', 'ვარიანტი B · მინის ეფექტი', 'მეორე მხარე ბუნდოვანდება და მუქდება, როგორც მინის მიღმა; მიტანილი ფოტო ოდნავ მიუახლოვდება.'],
+    ['v10', 'ვარიანტი C · ყვითელი ჩარჩო', 'არჩეულ მხარეს ყვითელი ჩარჩო ეხატება და ტექსტი ოდნავ გადაიწევს; მეორე მხარე უცვლელი რჩება.'],
+  ];
+  // ბანერი ზემოთ, აღწერა ქვემოთ — რომ პირველ ბანერს ჰედერი ზუსტად ისე დაედოს, როგორც საიტზე
+  const tpl = (cls) => `
+    <div class="${cls[0]}"><div class="hero">
+      <div class="p l" style="--s:1.16"><div class="img"></div><div class="veil"></div><div class="frame"></div>
+        <div class="body"><h1>სამოგზაურო დაზღვევა</h1><a class="cta" href="#">შეიძინე ონლაინ <i>→</i></a></div></div>
+      <div class="p r" style="--s:1.02"><div class="img"></div><div class="veil"></div><div class="frame"></div>
+        <div class="body"><h1>ვიზიტორთა სავალდებულო დაზღვევა</h1><a class="cta" href="#">შეიძინე ონლაინ <i>→</i></a></div></div>
+    </div>
+    </div>`;
+  document.getElementById('app').innerHTML = VARIANTS.map(tpl).join('');
+
+  // ვარიანტი 4: ფოტო მაუსს მიჰყვება
+  document.querySelectorAll('.v4 .p').forEach(p => {
+    const img = p.querySelector('.img'), base = parseFloat(p.style.getPropertyValue('--s')) || 1;
+    p.addEventListener('mousemove', e => {
+      const r = p.getBoundingClientRect();
+      const dx = (e.clientX - r.left) / r.width - .5, dy = (e.clientY - r.top) / r.height - .5;
+      img.style.transform = `scale(${base * 1.06}) translate(${(-dx * 26).toFixed(1)}px, ${(-dy * 18).toFixed(1)}px)`;
+    });
+    p.addEventListener('mouseleave', () => { img.style.transform = `scale(${base})`; });
+  });
+</script>
+</body></html>
